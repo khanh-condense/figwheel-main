@@ -95,15 +95,15 @@ registerRootComponent(renderFn);"
         create-indexjs-once
         (memoize #(spit (io/file "index.js")
                         (indexjs
-                         {:react-native-tool (tool-name config)
-                          :prod? prod?
-                          :output-to prod-output-to
-                          :options-url opts-url
-                          :auto-refresh auto-refresh?
-                          :assets-path          (str "./" (io/file (:output-dir options) "krell_assets.js"))
-                          :npm-requires-path    (str "./" (io/file (:output-dir options) "krell_npm_deps.js"))
-                          :npm-deps-path        (str "./" (io/file react-native-src-dir "npm_deps.js"))
-                          :figwheel-bridge-path (str "./" (io/file react-native-src-dir "figwheel-bridge.js"))})))
+                          {:react-native-tool    (tool-name config)
+                           :prod?                prod?
+                           :output-to            prod-output-to
+                           :options-url          opts-url
+                           :auto-refresh         auto-refresh?
+                           :assets-path          (clojure.string/replace (str "./" (io/file (:output-dir options) "krell_assets.js")) "\\" "/")
+                           :npm-requires-path    (clojure.string/replace (str "./" (io/file (:output-dir options) "krell_npm_deps.js")) "\\" "/")
+                           :npm-deps-path        (clojure.string/replace (str "./" (io/file react-native-src-dir "npm_deps.js")) "\\" "/")
+                           :figwheel-bridge-path (clojure.string/replace (str "./" (io/file react-native-src-dir "figwheel-bridge")) "\\" "/")})))
         pre-start-hook
         (fn [_]
           (let [npm-config (io/file "package.json")]

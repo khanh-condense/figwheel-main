@@ -38,7 +38,7 @@
   (#{".js"} (file-ext f)))
 
 (defn asset-require [path]
-  (str "\"" path "\": require('" path "')" ))
+  (str "\"" path "\": require('" path "')"))
 
 (defn assets-js [assets]
   (str
@@ -80,16 +80,16 @@
 (defn rewrite-asset-requires [env ast opts]
   (if (js-require-asset? ast)
     (let [referenced-path (-> ast :args first :val)
-          new-path
-          (str
-           (.normalize
-            (.toPath
-             (relativize
-              (.getAbsoluteFile (io/file (:output-dir opts)))
-              (.getAbsoluteFile
-               (io/file
-                (.getParentFile (io/file (ana-api/current-file)))
-                (normalize referenced-path)))))))
+          new-path (str
+                    (.normalize
+                     (.toPath
+                      (relativize
+                       (.getAbsoluteFile (io/file (:output-dir opts)))
+                       (.getAbsoluteFile
+                        (io/file
+                         (.getParentFile (io/file (ana-api/current-file)))
+                         (normalize referenced-path)))))))
+          new-path (clojure.string/replace new-path "\\" "/")
           cur-ns (ana-api/current-ns)]
       (collect-ns! cur-ns)
       (swap! (ana-api/current-state) update-in
@@ -160,7 +160,7 @@
                         (assets-js assets))))
 
 (defn export-dep [dep]
-  (str "\""dep "\": require('" dep "')" ))
+  (str "\""dep "\": require('" dep "')"))
 
 (defn krell-npm-deps-js
   "Returns the JavaScript code to support runtime require of bundled modules."
