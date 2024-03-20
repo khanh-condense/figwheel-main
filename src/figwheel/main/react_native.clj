@@ -91,7 +91,7 @@ registerRootComponent(renderFn);"
                          opts-url-scheme
                          (.getHost connect-url)
                          (.getPort connect-url)
-                         (:asset-path options))
+                         (str "/" (clojure.string/replace (:asset-path options) "\\" "/")))
         create-indexjs-once
         (memoize #(spit (io/file "index.js")
                         (indexjs
